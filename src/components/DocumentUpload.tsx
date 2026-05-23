@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useState } from "react";
-import { Upload, FileText, Image, Loader2, CheckCircle2, XCircle } from "lucide-react";
+import { Upload, FileText, Image as ImageIcon, Loader2, CheckCircle2, XCircle } from "lucide-react";
 import clsx from "clsx";
 import imageCompression from "browser-image-compression";
 import type { ExtractedData } from "@/lib/types";
@@ -145,7 +145,7 @@ export default function DocumentUpload({ onExtracted }: Props) {
             <p className="text-sm text-gray-500">Photo or PDF of prescription, discharge summary, or lab report</p>
             <div className="flex items-center gap-4 mt-1">
               <span className="flex items-center gap-1.5 text-xs text-gray-400">
-                <Image className="w-3.5 h-3.5" /> JPG, PNG, HEIC
+                <ImageIcon className="w-3.5 h-3.5" /> JPG, PNG, HEIC
               </span>
               <span className="flex items-center gap-1.5 text-xs text-gray-400">
                 <FileText className="w-3.5 h-3.5" /> PDF
