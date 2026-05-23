@@ -1,3 +1,5 @@
+export type FamilyRole = "me" | "mother" | "father" | "sister" | "brother";
+
 export interface Medication {
   id: string;
   name: string;
@@ -5,10 +7,10 @@ export interface Medication {
   dosage: string;
   frequency: string;
   route: string;
-  times: string[];           // e.g. ["8:00 AM", "8:00 PM"]
-  purpose: string;           // why it was prescribed
-  instructions: string;      // how to take it
-  avoid: string[];           // foods/activities to avoid
+  times: string[];
+  purpose: string;
+  instructions: string;
+  avoid: string[];
   sideEffects: string[];
   prescribedDate?: string;
   prescribedBy?: string;
@@ -20,10 +22,11 @@ export interface Diagnosis {
   name: string;
   icdCode?: string;
   date?: string;
+  sourceDocId?: string;
 }
 
 export interface FollowUp {
-  date: string;             // ISO date string
+  date: string;
   reason: string;
   provider?: string;
   location?: string;
@@ -69,30 +72,33 @@ export interface ChatMessage {
   id: string;
   role: "user" | "assistant";
   content: string;
-  tier?: ChatTier;       // only set on assistant messages
+  tier?: ChatTier;
   timestamp: string;
 }
 
 export interface ScheduleEntry {
-  time: string;          // e.g. "8:00 AM"
+  time: string;
   medication: Medication;
   taken?: boolean;
   takenAt?: string;
 }
 
-export interface DailySchedule {
-  date: string;
-  entries: ScheduleEntry[];
-}
-
-// What the AI extraction returns for a single document
 export interface ExtractedData {
-  patientName?: string;
-  dateOfBirth?: string;
+  patientName?: string | null;
+  dateOfBirth?: string | null;
+  documentType?: Document["type"];
   allergies?: string[];
   conditions?: Diagnosis[];
   medications?: Medication[];
   followUps?: FollowUp[];
-  documentType?: Document["type"];
   rawSummary?: string;
+}
+
+export interface FamilyMemberState {
+  id: FamilyRole;
+  displayName: string;
+  patient: PatientRecord;
+  alerts: SafetyAlert[];
+  chatHistory: ChatMessage[];
+  takenEntries: Record<string, boolean>;
 }

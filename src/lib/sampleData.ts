@@ -1,240 +1,43 @@
-import type { PatientRecord, SafetyAlert } from "./types";
+import type { FamilyRole, FamilyMemberState, PatientRecord } from "./types";
 
-export const SAMPLE_PATIENT: PatientRecord = {
-  id: "demo-patient-001",
-  patientName: "Robert Chen",
-  dateOfBirth: "1948-03-14",
-  allergies: ["Penicillin", "Sulfa drugs"],
-  conditions: [
-    { name: "Type 2 Diabetes Mellitus", icdCode: "E11", date: "2015-06-01" },
-    { name: "Atrial Fibrillation", icdCode: "I48", date: "2021-02-10" },
-    { name: "Hypertension", icdCode: "I10", date: "2012-09-15" },
-    { name: "Chronic Kidney Disease Stage 3", icdCode: "N18.3", date: "2023-01-20" },
-  ],
-  medications: [
-    {
-      id: "med-001",
-      name: "Warfarin",
-      genericName: "warfarin sodium",
-      dosage: "5 mg",
-      frequency: "Once daily",
-      route: "Oral",
-      times: ["6:00 PM"],
-      purpose: "Prevents blood clots due to atrial fibrillation",
-      instructions: "Take at the same time every evening. Do not crush or chew.",
-      avoid: [
-        "Alcohol — significantly increases bleeding risk",
-        "Ibuprofen, aspirin, naproxen — increases bleeding risk severely",
-        "Grapefruit and cranberry juice — alter drug metabolism",
-        "Large amounts of leafy greens (spinach, kale) — contain Vitamin K which reduces effect",
-        "St. John's Wort supplements",
-      ],
-      sideEffects: ["Unusual bruising", "Prolonged bleeding from cuts", "Pink/dark urine"],
-      prescribedDate: "2021-02-15",
-      prescribedBy: "Dr. Sarah Williams, Cardiologist",
-      active: true,
-      sourceDocId: "doc-001",
-    },
-    {
-      id: "med-002",
-      name: "Metformin",
-      genericName: "metformin hydrochloride",
-      dosage: "1000 mg",
-      frequency: "Twice daily",
-      route: "Oral",
-      times: ["8:00 AM", "8:00 PM"],
-      purpose: "Controls blood sugar in Type 2 Diabetes",
-      instructions:
-        "Take with food or milk to reduce stomach upset. Swallow whole with a full glass of water.",
-      avoid: [
-        "Alcohol — risk of lactic acidosis",
-        "Large amounts of simple carbohydrates/sugars",
-        "Contrast dye procedures — notify doctor before any CT scan with contrast",
-      ],
-      sideEffects: ["Nausea", "Diarrhea (usually improves after a few weeks)", "Metallic taste"],
-      prescribedDate: "2015-06-15",
-      prescribedBy: "Dr. James Park, Endocrinologist",
-      active: true,
-      sourceDocId: "doc-002",
-    },
-    {
-      id: "med-003",
-      name: "Lisinopril",
-      genericName: "lisinopril",
-      dosage: "10 mg",
-      frequency: "Once daily",
-      route: "Oral",
-      times: ["8:00 AM"],
-      purpose: "Controls blood pressure and protects kidneys",
-      instructions: "Take at the same time each morning. May be taken with or without food.",
-      avoid: [
-        "Potassium supplements or salt substitutes containing potassium",
-        "NSAIDs (ibuprofen, naproxen) — reduce effectiveness and harm kidneys",
-        "Alcohol — can lower blood pressure too much",
-      ],
-      sideEffects: ["Dry cough", "Dizziness on standing up quickly", "Elevated potassium"],
-      prescribedDate: "2012-09-20",
-      prescribedBy: "Dr. Angela Torres, Primary Care",
-      active: true,
-      sourceDocId: "doc-002",
-    },
-    {
-      id: "med-004",
-      name: "Atorvastatin",
-      genericName: "atorvastatin calcium",
-      dosage: "40 mg",
-      frequency: "Once daily (at night)",
-      route: "Oral",
-      times: ["9:00 PM"],
-      purpose: "Lowers cholesterol to reduce heart disease risk",
-      instructions:
-        "Take in the evening for best effect. Can be taken with or without food.",
-      avoid: [
-        "Grapefruit and grapefruit juice — increases drug level in blood, risk of side effects",
-        "Large amounts of alcohol",
-        "Some antibiotics (clarithromycin, erythromycin) — tell your doctor",
-      ],
-      sideEffects: ["Muscle pain or weakness", "Liver enzyme elevation", "Headache"],
-      prescribedDate: "2021-03-01",
-      prescribedBy: "Dr. Sarah Williams, Cardiologist",
-      active: true,
-      sourceDocId: "doc-001",
-    },
-    {
-      id: "med-005",
-      name: "Furosemide",
-      genericName: "furosemide",
-      dosage: "40 mg",
-      frequency: "Once daily (morning)",
-      route: "Oral",
-      times: ["8:00 AM"],
-      purpose: "Removes excess fluid (diuretic) to reduce blood pressure and heart strain",
-      instructions:
-        "Take in the morning to avoid nighttime urination. Take with food to prevent stomach upset.",
-      avoid: [
-        "NSAIDs — can reduce effectiveness",
-        "Licorice — can lower potassium further",
-        "Excessive sun exposure — increases sensitivity",
-        "Alcohol",
-      ],
-      sideEffects: [
-        "Frequent urination",
-        "Low potassium (muscle cramps, fatigue)",
-        "Dizziness",
-        "Dehydration signs (dry mouth, thirst)",
-      ],
-      prescribedDate: "2023-01-25",
-      prescribedBy: "Dr. Angela Torres, Primary Care",
-      active: true,
-      sourceDocId: "doc-003",
-    },
-  ],
-  followUps: [
-    {
-      date: "2026-06-10",
-      reason: "INR blood test for Warfarin dosage adjustment",
-      provider: "Dr. Sarah Williams",
-      location: "City Heart Clinic, Room 204",
-    },
-    {
-      date: "2026-07-02",
-      reason: "Quarterly HbA1c and kidney function (eGFR, creatinine)",
-      provider: "Dr. James Park",
-      location: "Westside Endocrinology Center",
-    },
-    {
-      date: "2026-06-28",
-      reason: "Annual primary care visit + medication review",
-      provider: "Dr. Angela Torres",
-      location: "Northside Family Medicine",
-    },
-  ],
-  documents: [
-    {
-      id: "doc-001",
-      type: "discharge",
-      uploadedAt: "2024-02-16",
-      fileName: "Discharge_Summary_CityHospital_Feb2024.pdf",
-      summary:
-        "Admitted for Atrial Fibrillation rate control. Started on Warfarin 5mg + Atorvastatin 40mg. INR monitoring required.",
-    },
-    {
-      id: "doc-002",
-      type: "prescription",
-      uploadedAt: "2024-03-05",
-      fileName: "Prescription_DrPark_Mar2024.jpg",
-      summary: "Renewal of Metformin 1000mg BID and Lisinopril 10mg QD for diabetes and hypertension management.",
-    },
-    {
-      id: "doc-003",
-      type: "prescription",
-      uploadedAt: "2024-04-12",
-      fileName: "Prescription_DrTorres_Apr2024.jpg",
-      summary:
-        "Added Furosemide 40mg QD after CKD Stage 3 diagnosis. Monitor potassium levels closely.",
-    },
-  ],
-  lastUpdated: "2024-04-12",
+export const FAMILY_ROLE_CONFIG: Record<
+  FamilyRole,
+  { label: string; initial: string; bgClass: string; textClass: string; borderClass: string }
+> = {
+  me:      { label: "Me",      initial: "M",  bgClass: "bg-sage-100",  textClass: "text-sage-700",  borderClass: "border-sage-300" },
+  mother:  { label: "Mother",  initial: "Mo", bgClass: "bg-rose-50",   textClass: "text-rose-600",  borderClass: "border-rose-200" },
+  father:  { label: "Father",  initial: "Fa", bgClass: "bg-sand-100",  textClass: "text-sand-500",  borderClass: "border-sand-300" },
+  sister:  { label: "Sister",  initial: "Si", bgClass: "bg-amber-50",  textClass: "text-amber-600", borderClass: "border-amber-200" },
+  brother: { label: "Brother", initial: "Br", bgClass: "bg-gray-100",  textClass: "text-gray-600",  borderClass: "border-gray-300" },
 };
 
-export const SAMPLE_ALERTS: SafetyAlert[] = [
-  {
-    id: "alert-001",
-    type: "drug-drug",
-    severity: "severe",
-    title: "Warfarin + NSAIDs",
-    message:
-      "Warfarin interacts severely with NSAIDs (ibuprofen, naproxen, aspirin). Together they dramatically increase the risk of serious internal bleeding.",
-    affectedMedications: ["Warfarin"],
-    recommendation:
-      "Never take ibuprofen or naproxen. Use acetaminophen (paracetamol) for pain relief only — and check with Dr. Williams before adding anything new.",
-    source: "rxnav",
-  },
-  {
-    id: "alert-002",
-    type: "drug-condition",
-    severity: "moderate",
-    title: "Metformin + CKD Stage 3",
-    message:
-      "Metformin can accumulate in patients with reduced kidney function (eGFR < 45), increasing the risk of lactic acidosis. Robert's CKD Stage 3 requires close monitoring.",
-    affectedMedications: ["Metformin"],
-    recommendation:
-      "Continue at current dose but ensure eGFR is checked at every quarterly visit. If eGFR drops below 45, Dr. Park may need to adjust the dose.",
-    source: "llm",
-  },
-  {
-    id: "alert-003",
-    type: "drug-food",
-    severity: "moderate",
-    title: "Atorvastatin + Grapefruit",
-    message:
-      "Grapefruit and grapefruit juice contain compounds that block the enzyme that breaks down Atorvastatin. This can increase the drug level in the blood, raising the risk of muscle damage (myopathy).",
-    affectedMedications: ["Atorvastatin"],
-    recommendation: "Avoid grapefruit and grapefruit juice entirely while on Atorvastatin.",
-    source: "llm",
-  },
-  {
-    id: "alert-004",
-    type: "drug-food",
-    severity: "severe",
-    title: "Warfarin + Cranberry / Alcohol",
-    message:
-      "Cranberry juice and alcohol both potentiate Warfarin's anticoagulant effect, substantially increasing bleeding risk.",
-    affectedMedications: ["Warfarin"],
-    recommendation:
-      "Avoid cranberry products and alcohol entirely. Even a single drink can cause an unpredictable INR spike.",
-    source: "llm",
-  },
-  {
-    id: "alert-005",
-    type: "drug-allergy",
-    severity: "severe",
-    title: "Penicillin Allergy on File",
-    message:
-      "Robert has a documented Penicillin allergy. Ensure any prescribing provider is aware before starting any antibiotic.",
-    affectedMedications: [],
-    recommendation:
-      "Alert every new provider. Carry an allergy card. Some cephalosporins have cross-reactivity — always confirm with the prescribing doctor.",
-    source: "llm",
-  },
-];
+export const FAMILY_ROLES: FamilyRole[] = ["me", "mother", "father", "sister", "brother"];
+
+export function createEmptyPatient(name: string): PatientRecord {
+  return {
+    id: `patient-${Math.random().toString(36).slice(2)}`,
+    patientName: name,
+    allergies: [],
+    conditions: [],
+    medications: [],
+    followUps: [],
+    documents: [],
+    lastUpdated: new Date().toISOString(),
+  };
+}
+
+export function createDefaultMembers(): Record<FamilyRole, FamilyMemberState> {
+  const result = {} as Record<FamilyRole, FamilyMemberState>;
+  for (const role of FAMILY_ROLES) {
+    const cfg = FAMILY_ROLE_CONFIG[role];
+    result[role] = {
+      id: role,
+      displayName: cfg.label,
+      patient: createEmptyPatient(cfg.label),
+      alerts: [],
+      chatHistory: [],
+      takenEntries: {},
+    };
+  }
+  return result;
+}
