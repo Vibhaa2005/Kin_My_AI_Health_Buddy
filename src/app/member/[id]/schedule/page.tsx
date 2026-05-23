@@ -1,7 +1,6 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import Nav from "@/components/Nav";
 import ScheduleCard from "@/components/ScheduleCard";
 import { useKinStore, buildScheduleForToday } from "@/lib/store";
 import { FAMILY_ROLES } from "@/lib/sampleData";

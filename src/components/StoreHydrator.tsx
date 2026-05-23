@@ -5,7 +5,7 @@ import { useKinStore } from "@/lib/store";
 
 export default function StoreHydrator() {
   useEffect(() => {
-    useKinStore.persist.rehydrate();
+    useKinStore.persist?.rehydrate?.();
   }, []);
   return null;
 }

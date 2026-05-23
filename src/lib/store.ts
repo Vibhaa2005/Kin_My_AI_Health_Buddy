@@ -185,7 +185,7 @@ export const useKinStore = create<KinStore>()(
               [id]: {
                 id,
                 displayName: cfg.displayName,
-                patient: createEmptyPatient(cfg.displayName),
+                patient: createEmptyPatient(id, cfg.displayName),
                 alerts: [],
                 chatHistory: [],
                 takenEntries: {},

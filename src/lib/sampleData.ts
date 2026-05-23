@@ -13,9 +13,9 @@ export const FAMILY_ROLE_CONFIG: Record<
 
 export const FAMILY_ROLES: FamilyRole[] = ["me", "mother", "father", "sister", "brother"];
 
-export function createEmptyPatient(name: string): PatientRecord {
+export function createEmptyPatient(role: string, name: string): PatientRecord {
   return {
-    id: `patient-${Math.random().toString(36).slice(2)}`,
+    id: `patient-${role}`,   // deterministic — avoids server/client hydration mismatch
     patientName: name,
     allergies: [],
     conditions: [],
@@ -33,7 +33,7 @@ export function createDefaultMembers(): Record<FamilyRole, FamilyMemberState> {
     result[role] = {
       id: role,
       displayName: cfg.label,
-      patient: createEmptyPatient(cfg.label),
+      patient: createEmptyPatient(role, cfg.label),
       alerts: [],
       chatHistory: [],
       takenEntries: {},
